@@ -1,0 +1,13 @@
+{
+  "name": "cutie-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for Cuti-E admin API - manage conversations, reply to feedback, monitor platform",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  }
+}

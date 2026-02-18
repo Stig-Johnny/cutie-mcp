@@ -12,6 +12,7 @@ MCP server for the [Cuti-E](https://cuti-e.com) admin API. Manage conversations,
 - Dashboard analytics (conversation stats, response times, breakdowns, trends)
 - Team member listing
 - Customer/team info
+- Active user stats (DAU/WAU/MAU) per app or across all apps
 
 ## Installation
 
@@ -74,6 +75,8 @@ Add to your `.mcp.json`:
 | `get_dashboard` | Analytics dashboard (stats, response times, trends) |
 | `list_team` | List team members and roles |
 | `get_customer` | Get team/customer info |
+| `get_active_users` | Get DAU/WAU/MAU for a specific app |
+| `get_active_users_all_apps` | Get active user counts across all apps |
 
 ## Security
 

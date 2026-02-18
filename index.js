@@ -271,6 +271,39 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         properties: {},
       },
     },
+    {
+      name: "get_active_users",
+      description:
+        "Get active user count (DAU/WAU/MAU) for a specific app based on anonymous activity pings.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          app_id: {
+            type: "string",
+            description: "The app ID to query (app_...)",
+          },
+          period: {
+            type: "string",
+            description: "Time period: 24h (DAU), 7d (WAU), 30d (MAU). Default: 24h",
+          },
+        },
+        required: ["app_id"],
+      },
+    },
+    {
+      name: "get_active_users_all_apps",
+      description:
+        "Get active user counts across all apps at once. Queries each app's DAU/WAU/MAU stats.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          period: {
+            type: "string",
+            description: "Time period: 24h (DAU), 7d (WAU), 30d (MAU). Default: 24h",
+          },
+        },
+      },
+    },
   ],
 }));
 
@@ -349,6 +382,32 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case "get_customer": {
         result = await apiRequest("GET", "/v1/customer");
+        break;
+      }
+
+      case "get_active_users": {
+        const query = { app_id: args.app_id };
+        if (args?.period) query.period = args.period;
+        result = await apiRequest("GET", "/v1/activity/stats", { query });
+        break;
+      }
+
+      case "get_active_users_all_apps": {
+        const apps = await apiRequest("GET", "/v1/apps");
+        const appList = apps.apps || apps;
+        const period = args?.period || "24h";
+        const stats = await Promise.all(
+          appList.map(async (app) => {
+            try {
+              return await apiRequest("GET", "/v1/activity/stats", {
+                query: { app_id: app.app_id, period },
+              });
+            } catch {
+              return { app_id: app.app_id, period, active_users: 0, error: "Failed to fetch stats" };
+            }
+          })
+        );
+        result = stats;
         break;
       }
 

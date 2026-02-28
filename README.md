@@ -63,20 +63,45 @@ Add to your `.mcp.json`:
 
 ## Tools
 
-| Tool | Description |
-|------|-------------|
-| `list_conversations` | List conversations with filters (status, priority, app, search, category) |
-| `get_conversation` | Get conversation with messages and tags |
-| `send_reply` | Send a reply or internal note |
-| `update_conversation` | Update status, priority, assignment, title, category |
-| `delete_conversation` | Close/delete a conversation |
-| `list_apps` | List registered apps with usage stats |
-| `get_app` | Get app details and configuration |
-| `get_dashboard` | Analytics dashboard (stats, response times, trends) |
-| `list_team` | List team members and roles |
-| `get_customer` | Get team/customer info |
-| `get_active_users` | Get DAU/WAU/MAU for a specific app |
-| `get_active_users_all_apps` | Get active user counts across all apps |
+### Conversations
+
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `list_conversations` | `status`, `priority`, `app_id`, `search`, `category`, `assigned_to`, `limit`, `offset`, `sort` | List conversations with optional filters. Returns status, priority, unread counts, and pagination. |
+| `get_conversation` | `conversation_id`* | Get a single conversation with full message history and tags. |
+| `send_reply` | `conversation_id`*, `message`*, `is_internal_note` | Send a visible reply or internal admin note. |
+| `update_conversation` | `conversation_id`*, `status`, `priority`, `assigned_admin_id`, `title`, `category` | Update one or more fields on a conversation. |
+| `delete_conversation` | `conversation_id`* | Close/delete a conversation. |
+
+**`list_conversations` filter values:**
+- `status`: `open` · `in_progress` · `waiting_user` · `waiting_admin` · `resolved` · `closed`
+- `priority`: `low` · `normal` · `high` · `urgent`
+- `category`: `bug` · `feature` · `question` · `feedback` · `other`
+- `sort`: `last_message` (default) · `created` · `updated`
+
+### Apps
+
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `list_apps` | — | List all registered apps with usage stats. |
+| `get_app` | `app_id`* | Get app details, configuration, and notification settings. |
+
+### Analytics
+
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `get_dashboard` | `period` | Conversation stats, response times, category/status/priority breakdowns, daily trends, and team activity. `period`: `7d` · `30d` (default) · `90d` · `all` |
+| `get_active_users` | `app_id`*, `period` | DAU/WAU/MAU for a specific app. `period`: `day` · `week` · `month` (default: all three) |
+| `get_active_users_all_apps` | `period` | Active user counts aggregated across all apps. |
+
+### Team & Account
+
+| Tool | Parameters | Description |
+|------|-----------|-------------|
+| `list_team` | — | List all team members with their roles. |
+| `get_customer` | — | Get team/customer info including tier, mascot settings, and brand color. |
+
+\* Required parameter
 
 ## Security
 
